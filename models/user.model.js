@@ -1,7 +1,7 @@
-// import mongoose module in application
+// Import mongoose module in application
 const mongoose = require("mongoose");
 
-// define user schema. We will define these fields in
+// Define user schema. We will define these fields in
 // our schema: name, userId, password, email, userType
 const userSchema = new mongoose.Schema({
     name: {
@@ -29,4 +29,7 @@ const userSchema = new mongoose.Schema({
         default: "CUSTOMER",   // if user doesn't provide its userType; it will be treated as type "CUSTOMER"
         enum: ["CUSTOMER", "ADMIN"]   // userType can be any one amongst "CUSTOMER" and "ADMIN"
     }
-});
+}, {timestamps: true, versionKey: false});
+
+// Create a collection corressponding to the above schema, and export it
+module.exports = mongoose.model("User", userSchema);
