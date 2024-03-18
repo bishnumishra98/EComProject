@@ -1,18 +1,16 @@
-// The logic to register an user will be present in this file
+// The logic to register an user, and sign-in the user will be present in this file
 
 const bcrypt = require("bcryptjs");
 const user_model = require("../models/user.model");
-const jwt = require("jsonwebtoken");
-const secret = require("../configs/auth.config");
-const userModel = require("../models/user.model");
 
 exports.signup = async (req, res) => {
-    /**
-     * Logic to create the user
-    */
+    // To create a new user, we follow a simple 3-step process:
+    // 1. Read the request body.
+    // 2. Insert the data in the Users collection in MongoDB.
+    // 3. Return the response back to the user, as an acknowledgement that he/she has been created.
 
     // 1. Read the request body
-    const request_body = req.body;
+    const request_body = req.body;   // 'req.body' gives the request body in form of a JavaScript object
 
     // 2. Insert the data in the Users collection in MongoDB
     const userObj = {
@@ -24,11 +22,10 @@ exports.signup = async (req, res) => {
     }
 
     try {
-        const user_created = await user_model.create(userObj)
-        /**
-         * Return this user
-        */
-
+        // create the user in DB using create() method
+        const user_created = await user_model.create(userObj);
+        
+        // 3. Return the response back to the user, as an acknowledgement that he/she has been created.
         const res_obj = {
             name : user_created.name,
             userId : user_created.userId,
@@ -39,42 +36,9 @@ exports.signup = async (req, res) => {
         }
         res.status(201).send(res_obj);
     } catch (err) {
-        console.log("Error while registering the user", err)
+        console.log("Error while registering the user", err);
         res.status(500).send({
-            message : "Some error happened while registering the user"
+            message : "Some error happened while registering the user."
         });
     }
-}
-
-// 3. Return the response back to the user
-exports.signin = async (req, res) => {
-    // Check if the user id is present in the system
-    const user = await user_model.findOne({userId : req.body.userId})
-
-    if(user == null) {
-        return res.status(400).send({
-            message : "User id passed is not a valid user id"
-        });
-    }
-
-    // Password is correct 
-    const isPasswordValid = bcrypt.compareSync(req.body.password, user.password);
-    if (!isPasswordValid) {
-        return res.status(401).send({
-            message : 'Wrong password passed'
-        });
-    }
-
-    // using jwt we will create the acces token with a given TTL and return
-    const token = jwt.sign({id : user.userId}, secret.secret, {
-        expiresIn : 120
-    });
-
-    res.status(200).send({
-        name : user.name,
-        userId : user.userId,
-        email : user.email,
-        userType : user.userType,
-        accessToken : token 
-    });
 }

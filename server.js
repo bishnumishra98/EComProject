@@ -2,12 +2,16 @@
 
 const express = require("express");
 const app = express();
-
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
+
 const server_config = require("./configs/server.config");
 const db_config = require("./configs/db.config");
 const user_model = require("./models/user.model");
-const bcrypt = require("bcryptjs");
+
+
+// The JSON that is passed as request object's body shall be read as JavaScript object
+app.use(express.json());   // express.json() is a built-in middleware function in Express
 
 // Create an admin user at the starting of the application if its not already present ---
 
@@ -41,7 +45,7 @@ async function init() {
         user = await user_model.create({
             name: "Bishnu",
             userId: "admin",
-            email: "bishnumishra1109@gmail.com",
+            email: "bishnumishra@gmail.com",
             userType: "ADMIN",
             password: bcrypt.hashSync("W@lcome1", 8)
             // The argument '8' in hashSync() function is the number of salt rounds,
@@ -58,6 +62,8 @@ async function init() {
 }
 
 
+// Stich the routes to the server
+require("./routes/auth.routes")(app);   // calling routes and passing app object
 
 
 // Start the server
