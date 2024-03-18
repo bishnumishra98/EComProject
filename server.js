@@ -10,8 +10,10 @@ const db_config = require("./configs/db.config");
 const user_model = require("./models/user.model");
 
 
-// The JSON that is passed as request object's body shall be read as JavaScript object
-app.use(express.json());   // express.json() is a built-in middleware function in Express
+// express.json() is a built-in middleware function in Express.
+// This middleware function parses incoming request bodies with JSON payloads
+// and makes them available as JavaScript objects in the req.body property.
+app.use(express.json());
 
 // Create an admin user at the starting of the application if its not already present ---
 
@@ -25,7 +27,7 @@ db.once("open", () => {
     init();
 });
 db.on("error", (err) => {
-    console.log("failed to establish connection with MongoDB: ", err);
+    console.log("Failed to establish connection with MongoDB: ", err);
 });
 
 async function init() {
@@ -44,7 +46,7 @@ async function init() {
     try {
         user = await user_model.create({
             name: "Bishnu",
-            userId: "admin",
+            userId: "bishnu98",
             email: "bishnumishra@gmail.com",
             userType: "ADMIN",
             password: bcrypt.hashSync("W@lcome1", 8)
@@ -68,5 +70,5 @@ require("./routes/auth.routes")(app);   // calling routes and passing app object
 
 // Start the server
 app.listen(server_config.PORT, () => {
-    console.log("Server started at port number: ", server_config.PORT);
+    console.log("Server started at port number:", server_config.PORT);
 });

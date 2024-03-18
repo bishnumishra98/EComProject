@@ -1,6 +1,6 @@
 module.exports = {
     DB_NAME: "ecom_db",
-    DB_URL: "mongodb://localhost/ecom_db"   // instead of localhost, we can even write 0.0.0.0
+    DB_URL: "mongodb://0.0.0.0/ecom_db"   // instead of 0.0.0.0, we can even write localhost 
 }
 
 // IP of localhost is '0.0.0.0'.
