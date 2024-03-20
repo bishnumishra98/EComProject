@@ -1,23 +1,24 @@
 // This middleware checks whether is request body is proper or not
+const user_model = require("../models/user.model");
 
 const verifySignupBody = async (req, res, next) => {
     try {
-        // check for name
+        // check if name not present in request body
         if(!req.body.name) {
             return res.status(400).send({
                 message: "Failed ! Name was not provided."
             });
         }
 
-        // check for email
+        // check if email not present in request body
         if(!req.body.email) {
             return res.status(400).send({
                 message: "Failed ! Email was not provided."
             });
         }
 
-        // check for userId
-        if(!req.body.email) {
+        // check if userId not present in request body
+        if(!req.body.userId) {
             return res.status(400).send({
                 message: "Failed ! UserId was not provided."
             });
